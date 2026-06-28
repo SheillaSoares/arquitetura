@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sheilla Soares — Arquitetura & Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --off-white: #F8F6F2;
+    --black: #111111;
+    --gold: #C9A96E;
+    --stone: #8A8A8A;
+    --beige: #EDE9E1;
+    --dark-bg: #1A1A18;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--off-white);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform .2s ease, width .3s ease, height .3s ease;
+    mix-blend-mode: multiply;
+  }
+  .cursor.expand { width: 48px; height: 48px; transform: translate(-50%,-50%) !important; }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 56px;
+    z-index: 100;
+    mix-blend-mode: multiply;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 1.1rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--off-white);
+    text-decoration: none;
+    mix-blend-mode: normal;
+  }
+  .logo span { color: var(--gold); }
+  nav { display: flex; gap: 40px; }
+  nav a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: .78rem;
+    font-weight: 400;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(248,246,242,.7);
+    transition: color .3s;
+    position: relative;
+  }
+  nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width .4s ease;
+  }
+  nav a:hover { color: var(--off-white); }
+  nav a:hover::after { width: 100%; }
+  .nav-contact {
+    font-size: .78rem;
+    font-weight: 400;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--gold);
+    border: 1px solid rgba(201,169,110,.4);
+    padding: 8px 20px;
+    transition: background .3s, color .3s;
+  }
+  .nav-contact:hover { background: var(--gold); color: var(--black); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .hero-img {
+    position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=85') center/cover no-repeat;
+    transform: scale(1.08);
+    transition: transform 8s ease;
+  }
+  .hero-img.loaded { transform: scale(1); }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(17,17,17,.55) 0%, rgba(17,17,17,.75) 100%);
+  }
+  .hero-big-word {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(90px, 16vw, 220px);
+    font-weight: 300;
+    letter-spacing: -.02em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(201,169,110,.22);
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 56px 72px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .hero-left h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.6rem, 5vw, 4.4rem);
+    font-weight: 300;
+    color: var(--off-white);
+    line-height: 1.12;
+    margin-bottom: 20px;
+  }
+  .hero-left h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-left p {
+    font-size: .95rem;
+    color: rgba(248,246,242,.65);
+    max-width: 360px;
+    line-height: 1.7;
+  }
+  .hero-right {
+    text-align: right;
+  }
+  .hero-right .scroll-label {
+    font-size: .72rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(248,246,242,.4);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .scroll-line {
+    width: 1px; height: 80px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    margin-left: auto;
+    animation: scrollLine 2s ease infinite;
+  }
+  @keyframes scrollLine {
+    0%,100% { opacity: .3; transform: scaleY(.6); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+  .hero-badge {
+    position: absolute;
+    bottom: 72px; left: 50%;
+    transform: translateX(-50%);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: rgba(248,246,242,.35);
+    z-index: 3;
+  }
+  .btn-hero {
+    display: inline-block;
+    margin-top: 36px;
+    padding: 14px 40px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .35s, color .35s;
+  }
+  .btn-hero:hover { background: var(--gold); color: var(--black); }
+
+  /* ── SECTION WRAPPER ── */
+  section { padding: 110px 56px; }
+  .section-eyebrow {
+    font-size: .72rem;
+    font-weight: 400;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--black);
+  }
+  .section-title em { font-style: italic; color: var(--stone); }
+  .divider {
+    width: 48px; height: 1px;
+    background: var(--gold);
+    margin: 32px 0;
+  }
+
+  /* ── SOBRE ── */
+  #sobre {
+    background: var(--off-white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .sobre-img-wrap {
+    position: relative;
+  }
+  .sobre-img-wrap img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(15%);
+  }
+  .sobre-img-wrap::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: -20px;
+    right: 20px; bottom: 20px;
+    border: 1px solid var(--gold);
+    opacity: .35;
+    z-index: -1;
+  }
+  .sobre-tag {
+    position: absolute;
+    bottom: 28px; right: -24px;
+    background: var(--dark-bg);
+    color: var(--off-white);
+    padding: 18px 24px;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+  .sobre-tag strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold);
+    letter-spacing: 0;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .sobre-text p {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: #444;
+    margin-bottom: 18px;
+  }
+  .sobre-credenciais {
+    display: flex;
+    gap: 36px;
+    margin-top: 36px;
+    padding-top: 36px;
+    border-top: 1px solid var(--beige);
+  }
+  .credencial { flex: 1; }
+  .credencial .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .credencial .label {
+    font-size: .75rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-top: 6px;
+  }
+
+  /* ── SERVIÇOS ── */
+  #servicos {
+    background: var(--dark-bg);
+  }
+  #servicos .section-title { color: var(--off-white); }
+  #servicos .section-title em { color: var(--stone); }
+  #servicos .section-eyebrow { color: var(--gold); }
+  #servicos .divider { background: var(--gold); }
+  .servicos-intro {
+    color: rgba(248,246,242,.55);
+    max-width: 480px;
+    line-height: 1.8;
+    font-size: .95rem;
+    margin-bottom: 64px;
+  }
+  .servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .servico-card {
+    background: rgba(248,246,242,.03);
+    border: 1px solid rgba(248,246,242,.07);
+    padding: 44px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: background .4s;
+    cursor: default;
+  }
+  .servico-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width .5s ease;
+  }
+  .servico-card:hover { background: rgba(201,169,110,.06); }
+  .servico-card:hover::after { width: 100%; }
+  .servico-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: rgba(201,169,110,.2);
+    position: absolute;
+    top: 24px; right: 28px;
+    line-height: 1;
+  }
+  .servico-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--off-white);
+    margin-bottom: 14px;
+    margin-top: 8px;
+  }
+  .servico-card p {
+    font-size: .85rem;
+    color: rgba(248,246,242,.45);
+    line-height: 1.75;
+  }
+  .servico-icon {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  /* ── PROJETOS ── */
+  #projetos { padding: 110px 0; background: var(--off-white); }
+  #projetos .header-area { padding: 0 56px 64px; }
+  .projetos-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+  }
+  .proj-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .proj-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .7s ease, filter .7s ease;
+    filter: grayscale(20%);
+  }
+  .proj-card:hover img { transform: scale(1.06); filter: grayscale(0%); }
+  .proj-card:first-child { grid-row: span 2; min-height: 620px; }
+  .proj-card:not(:first-child) { height: 308px; }
+  .proj-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(17,17,17,.8) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity .4s;
+    display: flex; align-items: flex-end;
+    padding: 32px;
+  }
+  .proj-card:hover .proj-overlay { opacity: 1; }
+  .proj-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--off-white);
+    margin-bottom: 6px;
+  }
+  .proj-info span {
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── PROCESSO ── */
+  #processo {
+    background: var(--beige);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .processo-steps { margin-top: 8px; }
+  .step {
+    display: flex;
+    gap: 28px;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(17,17,17,.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--gold);
+    min-width: 36px;
+    line-height: 1;
+  }
+  .step-body h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .step-body p {
+    font-size: .85rem;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  /* ── DEPOIMENTOS ── */
+  #depoimentos {
+    background: var(--dark-bg);
+    overflow: hidden;
+  }
+  .depo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 64px;
+  }
+  .depo-card {
+    background: rgba(248,246,242,.04);
+    border: 1px solid rgba(248,246,242,.07);
+    padding: 36px 32px;
+  }
+  .depo-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(248,246,242,.75);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .depo-author {
+    font-size: .78rem;
+    font-weight: 400;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .depo-city {
+    font-size: .75rem;
+    color: rgba(248,246,242,.3);
+    margin-top: 4px;
+  }
+  #depoimentos .section-title { color: var(--off-white); }
+  #depoimentos .section-eyebrow { color: var(--gold); }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    background: var(--gold);
+    padding: 72px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .cta-band h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 300;
+    color: var(--black);
+    max-width: 520px;
+    line-height: 1.2;
+  }
+  .cta-band h2 em { font-style: italic; }
+  .btn-dark {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 44px;
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background .3s;
+  }
+  .btn-dark:hover { background: #2a2a2a; }
+
+  /* ── CONTATO ── */
+  #contato {
+    background: var(--off-white);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .contato-info { padding-top: 8px; }
+  .contato-info p {
+    font-size: .95rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+  .contato-links { display: flex; flex-direction: column; gap: 20px; }
+  .contato-link {
+    display: flex; align-items: center; gap: 16px;
+    text-decoration: none;
+    color: var(--black);
+    font-size: .9rem;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--beige);
+    transition: color .3s;
+  }
+  .contato-link:hover { color: var(--gold); }
+  .contato-link-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--beige);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: border-color .3s, background .3s;
+  }
+  .contato-link:hover .contato-link-icon {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: var(--black);
+  }
+  .form-area {
+    background: var(--beige);
+    padding: 52px 48px;
+  }
+  .form-area h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: .7rem;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: var(--off-white);
+    border: 1px solid transparent;
+    padding: 13px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .9rem;
+    color: var(--black);
+    outline: none;
+    transition: border-color .3s;
+    -webkit-appearance: none;
+  }
+  .form-group select {
+    cursor: pointer;
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background .3s;
+    margin-top: 8px;
+  }
+  .btn-submit:hover { background: #2e2e2e; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 48px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--off-white);
+  }
+  .footer-logo span { color: var(--gold); }
+  footer p {
+    font-size: .75rem;
+    color: rgba(248,246,242,.3);
+    letter-spacing: .05em;
+  }
+  .footer-nav { display: flex; gap: 32px; }
+  .footer-nav a {
+    font-size: .75rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(248,246,242,.35);
+    transition: color .3s;
+  }
+  .footer-nav a:hover { color: var(--gold); }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed;
+    bottom: 36px; right: 36px;
+    z-index: 200;
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .wa-float:hover .wa-label { opacity: 1; transform: translateX(0); }
+  .wa-label {
+    background: var(--black);
+    color: var(--off-white);
+    font-size: .75rem;
+    font-weight: 400;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity .3s, transform .3s;
+    white-space: nowrap;
+  }
+  .wa-btn {
+    width: 54px; height: 54px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(37,211,102,.4);
+    transition: transform .3s, box-shadow .3s;
+  }
+  .wa-float:hover .wa-btn {
+    transform: scale(1.1);
+    box-shadow: 0 6px 32px rgba(37,211,102,.55);
+  }
+  .wa-btn svg { width: 26px; height: 26px; fill: #fff; }
+
+  /* ── REVEAL ANIMATIONS ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    section { padding: 80px 32px; }
+    header { padding: 24px 32px; }
+    #sobre, #contato, #processo { grid-template-columns: 1fr; gap: 48px; }
+    .servicos-grid { grid-template-columns: repeat(2, 1fr); }
+    .projetos-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .proj-card:first-child { grid-row: span 1; min-height: 280px; }
+    .proj-card:not(:first-child) { height: 240px; }
+    .depo-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .footer-nav { justify-content: center; }
+    .cta-band { flex-direction: column; text-align: center; }
+    nav { gap: 20px; }
+    .sobre-tag { right: 0; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    section { padding: 64px 20px; }
+    header { padding: 20px 20px; }
+    nav { display: none; }
+    .hero-content { flex-direction: column; align-items: flex-start; gap: 24px; padding: 0 20px 48px; }
+    .hero-right { display: none; }
+    .servicos-grid { grid-template-columns: 1fr; }
+    .depo-grid { grid-template-columns: 1fr; }
+    .projetos-grid { grid-template-columns: 1fr; }
+    .proj-card:first-child { min-height: 320px; }
+    .proj-overlay { opacity: 1; }
+    .form-area { padding: 36px 24px; }
+    footer { padding: 36px 20px; }
+    .cta-band { padding: 48px 20px; }
+    #projetos .header-area { padding: 0 20px 48px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">Sheilla <span>Soares</span></a>
+  <nav>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#processo">Processo</a>
+    <a href="#contato" class="nav-contact">Contato</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img" id="heroImg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-big-word">ARQUITETURA</div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <h1>Espaços que<br>contam <em>histórias</em></h1>
+      <p>Projetos arquitetônicos residenciais e comerciais que unem estética contemporânea, funcionalidade e identidade única.</p>
+      <a href="#projetos" class="btn-hero">Explorar Projetos</a>
+    </div>
+    <div class="hero-right">
+      <div class="scroll-label">Scroll</div>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="sobre-img-wrap reveal">
+    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=900&q=85" alt="Interior projetado por Sheilla Soares">
+    <div class="sobre-tag">
+      <strong>+7</strong>
+      Anos de experiência
+    </div>
+  </div>
+  <div class="sobre-text reveal">
+    <div class="section-eyebrow">Sobre a Arquiteta</div>
+    <h2 class="section-title">Sheilla Soares<br><em>Arquiteta & Designer</em></h2>
+    <div class="divider"></div>
+    <p>Graduada em Arquitetura e Urbanismo e apaixonada por criar ambientes que transcendem o funcional para tocar o sensorial. Cada projeto nasce de uma escuta cuidadosa: entender quem vai habitar o espaço, como vive, o que sonha.</p>
+    <p>Com especialização em projetos contemporâneos e design de interiores, Sheilla alia precisão técnica a uma sensibilidade estética refinada, entregando obras que equilibram beleza, conforto e eficiência construtiva.</p>
+    <p>Atende clientes em Volta Redonda, Sul Fluminense e em todo o estado do Rio de Janeiro, com projetos também em outras regiões via consultoria remota.</p>
+    <div class="sobre-credenciais">
+      <div class="credencial">
+        <div class="num">50+</div>
+        <div class="label">Projetos entregues</div>
+      </div>
+      <div class="credencial">
+        <div class="num">100%</div>
+        <div class="label">Clientes satisfeitos</div>
+      </div>
+      <div class="credencial">
+        <div class="num">CAU</div>
+        <div class="label">Registro profissional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="section-eyebrow reveal">O que faço</div>
+  <h2 class="section-title reveal">Serviços <em>completos</em><br>do projeto à obra</h2>
+  <div class="divider reveal"></div>
+  <p class="servicos-intro reveal">Do primeiro esboço à entrega das chaves — acompanho cada etapa com dedicação e expertise para transformar sua visão em realidade.</p>
+  <div class="servicos-grid">
+    <div class="servico-card reveal">
+      <span class="servico-num">01</span>
+      <span class="servico-icon">🏠</span>
+      <h3>Projeto Arquitetônico Residencial</h3>
+      <p>Residências unifamiliares, reformas e ampliações com projeto arquitetônico completo: plantas, cortes, fachadas, especificações técnicas e acompanhamento de obra.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">02</span>
+      <span class="servico-icon">🏢</span>
+      <h3>Projeto Arquitetônico Comercial</h3>
+      <p>Escritórios, lojas, restaurantes e estabelecimentos comerciais. Espaços pensados para otimizar fluxos, fortalecer a marca e encantar clientes.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">03</span>
+      <span class="servico-icon">🛋️</span>
+      <h3>Design de Interiores</h3>
+      <p>Ambientes sofisticados e funcionais — seleção de revestimentos, móveis, iluminação, paleta de cores e todos os elementos que constroem a identidade do espaço.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">04</span>
+      <span class="servico-icon">🔮</span>
+      <h3>Visualização 3D & Renderização</h3>
+      <p>Imagens fotorrealistas e tours virtuais que permitem visualizar o projeto antes da obra começar, garantindo assertividade nas decisões.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">05</span>
+      <span class="servico-icon">📐</span>
+      <h3>Projeto para Aprovação Legal</h3>
+      <p>Elaboração e protocolo de projetos junto à Prefeitura e demais órgãos competentes — Habite-se, regularização e licenças construtivas.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">06</span>
+      <span class="servico-icon">🔧</span>
+      <h3>Projetos Complementares</h3>
+      <p>Projetos de instalações elétricas, hidrossanitárias, estruturais e de climatização integrados ao projeto arquitetônico, com coordenação entre disciplinas.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">07</span>
+      <span class="servico-icon">🌿</span>
+      <h3>Paisagismo & Área Externa</h3>
+      <p>Jardins, áreas de lazer, piscinas e espaços externos que ampliam a experiência de viver e valorizam o imóvel com naturalidade e sofisticação.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">08</span>
+      <span class="servico-icon">🏗️</span>
+      <h3>Gerenciamento de Obras</h3>
+      <p>Acompanhamento técnico presencial e remoto durante a execução da obra — cronograma, qualidade, controle de custos e relacionamento com fornecedores.</p>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">09</span>
+      <span class="servico-icon">💡</span>
+      <h3>Consultoria Avulsa</h3>
+      <p>Visita técnica e consultoria pontual para sanar dúvidas, avaliar imóveis, orientar reformas ou revisar projetos existentes. Ideal para decisões assertivas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos">
+  <div class="header-area">
+    <div class="section-eyebrow reveal">Portfólio</div>
+    <h2 class="section-title reveal">Projetos <em>selecionados</em></h2>
+  </div>
+  <div class="projetos-grid">
+    <div class="proj-card reveal">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80" alt="Residência Moderna">
+      <div class="proj-overlay">
+        <div class="proj-info">
+          <h3>Residência Moderna</h3>
+          <span>Projeto Residencial · Volta Redonda, RJ</span>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=80" alt="Casa Contemporânea">
+      <div class="proj-overlay">
+        <div class="proj-info">
+          <h3>Casa Contemporânea</h3>
+          <span>Projeto Residencial · Barra Mansa, RJ</span>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=700&q=80" alt="Interior Design">
+      <div class="proj-overlay">
+        <div class="proj-info">
+          <h3>Design de Interiores</h3>
+          <span>Interiores · Rio de Janeiro, RJ</span>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <img src="https://images.unsplash.com/photo-1600047509358-9dc75507daeb?w=700&q=80" alt="Projeto Comercial">
+      <div class="proj-overlay">
+        <div class="proj-info">
+          <h3>Projeto Comercial</h3>
+          <span>Escritório · Angra dos Reis, RJ</span>
+        </div>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <img src="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=700&q=80" alt="Apartamento Integrado">
+      <div class="proj-overlay">
+        <div class="proj-info">
+          <h3>Apartamento Integrado</h3>
+          <span>Reforma · Resende, RJ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section id="processo">
+  <div class="reveal">
+    <div class="section-eyebrow">Como trabalhamos</div>
+    <h2 class="section-title">Um processo <em>claro</em><br>do início ao fim</h2>
+    <div class="divider"></div>
+    <p style="font-size:.95rem;color:#555;line-height:1.8;max-width:400px;">Transparência e comunicação em cada etapa. Você sempre sabe o que está acontecendo com o seu projeto.</p>
+  </div>
+  <div class="processo-steps reveal">
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-body">
+        <h4>Reunião de Briefing</h4>
+        <p>Conversa inicial para entender suas necessidades, estilo de vida, orçamento e expectativas. Gratuita e sem compromisso.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-body">
+        <h4>Estudo Preliminar</h4>
+        <p>Primeiras propostas de conceito, plantas e volumetria. Momento de ajustes e alinhamento antes do projeto avançar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-body">
+        <h4>Anteprojeto & 3D</h4>
+        <p>Desenvolvimento completo com visualizações 3D fotorrealistas para você se sentir dentro do espaço ainda no papel.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <div class="step-body">
+        <h4>Projeto Executivo</h4>
+        <p>Documentação técnica completa para a obra: plantas, cortes, detalhamentos, especificações e projetos complementares.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">5</div>
+      <div class="step-body">
+        <h4>Acompanhamento de Obra</h4>
+        <p>Visitas técnicas periódicas e suporte contínuo para garantir fidelidade ao projeto e qualidade de execução.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="section-eyebrow reveal">Clientes</div>
+  <h2 class="section-title reveal">O que dizem sobre<br><em>nosso trabalho</em></h2>
+  <div class="depo-grid">
+    <div class="depo-card reveal">
+      <p class="depo-quote">"A Sheilla entendeu o que queríamos antes mesmo de explicarmos por completo. O resultado superou tudo que imaginávamos para a nossa casa."</p>
+      <div class="depo-author">Família Rodrigues</div>
+      <div class="depo-city">Volta Redonda, RJ</div>
+    </div>
+    <div class="depo-card reveal">
+      <p class="depo-quote">"Profissional impecável. O projeto do nosso escritório ficou funcional, bonito e dentro do orçamento combinado. Recomendo sem hesitar."</p>
+      <div class="depo-author">Marcos Andrade</div>
+      <div class="depo-city">Barra Mansa, RJ</div>
+    </div>
+    <div class="depo-card reveal">
+      <p class="depo-quote">"O processo foi transparente do início ao fim. As visualizações 3D nos deram segurança para tomar decisões. Ficou exatamente como mostrado."</p>
+      <div class="depo-author">Ana & Paulo Ferreira</div>
+      <div class="depo-city">Resende, RJ</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band reveal">
+  <h2>Pronta para transformar<br><em>o seu espaço?</em></h2>
+  <a href="https://wa.me/5524999322402?text=Olá,%20Sheilla!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="btn-dark">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Falar com a Sheilla
+  </a>
+</div>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contato-info reveal">
+    <div class="section-eyebrow">Contato</div>
+    <h2 class="section-title">Vamos criar algo<br><em>incrível juntos</em></h2>
+    <div class="divider"></div>
+    <p>Entre em contato para conversar sobre seu projeto. O primeiro bate-papo é sempre gratuito e sem compromisso.</p>
+    <div class="contato-links">
+      <a href="https://wa.me/5524999322402" target="_blank" class="contato-link">
+        <div class="contato-link-icon">📱</div>
+        <div>
+          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);margin-bottom:4px">WhatsApp</div>
+          (24) 99932-2402
+        </div>
+      </a>
+      <a href="mailto:sheilla_06@gmail.com" class="contato-link">
+        <div class="contato-link-icon">✉️</div>
+        <div>
+          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);margin-bottom:4px">E-mail</div>
+          sheilla_06@gmail.com
+        </div>
+      </a>
+      <a href="#" class="contato-link">
+        <div class="contato-link-icon">📍</div>
+        <div>
+          <div style="font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--stone);margin-bottom:4px">Localização</div>
+          Volta Redonda — Sul Fluminense, RJ
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="form-area reveal">
+    <h3>Envie uma mensagem</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" placeholder="Seu nome completo">
+      </div>
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="tel" placeholder="(00) 00000-0000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" placeholder="seu@email.com">
+    </div>
+    <div class="form-group">
+      <label>Tipo de projeto</label>
+      <select>
+        <option value="">Selecione...</option>
+        <option>Projeto Residencial</option>
+        <option>Projeto Comercial</option>
+        <option>Design de Interiores</option>
+        <option>Reforma</option>
+        <option>Consultoria</option>
+        <option>Paisagismo</option>
+        <option>Outro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mensagem</label>
+      <textarea placeholder="Conte um pouco sobre o seu projeto, localização e expectativas..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="submitForm(event)">Enviar Mensagem</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Sheilla <span>Soares</span></div>
+  <p>© 2026 Sheilla Soares Arquitetura. Todos os direitos reservados.</p>
+  <nav class="footer-nav">
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#contato">Contato</a>
+  </nav>
+</footer>
+
+<!-- WHATSAPP FLUTUANTE -->
+<a href="https://wa.me/5524999322402?text=Olá,%20Sheilla!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="wa-float" aria-label="Falar no WhatsApp">
+  <div class="wa-label">Falar com a Sheilla</div>
+  <div class="wa-btn">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </div>
+</a>
+
+<script>
+  // Cursor suave
+  const cursor = document.getElementById('cursor');
+  let mx = 0, my = 0, cx = 0, cy = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.querySelectorAll('a, button, .servico-card, .proj-card').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+  });
+  function animateCursor() {
+    cx += (mx - cx) * .15;
+    cy += (my - cy) * .15;
+    cursor.style.transform = `translate(${cx - 5}px, ${cy - 5}px)`;
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Hero parallax + image load
+  const heroImg = document.getElementById('heroImg');
+  window.addEventListener('load', () => heroImg.classList.add('loaded'));
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    heroImg.style.transform = `scale(1) translateY(${y * .28}px)`;
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Header blend mode fix on scroll
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > window.innerHeight - 80) {
+      header.style.background = 'rgba(248,246,242,.97)';
+      header.style.backdropFilter = 'blur(12px)';
+      header.style.mixBlendMode = 'normal';
+      header.querySelectorAll('nav a').forEach(a => a.style.color = 'rgba(17,17,17,.6)');
+      header.querySelector('.logo').style.color = 'var(--black)';
+    } else {
+      header.style.background = 'transparent';
+      header.style.backdropFilter = 'none';
+      header.style.mixBlendMode = 'multiply';
+      header.querySelectorAll('nav a').forEach(a => a.style.color = 'rgba(248,246,242,.7)');
+      header.querySelector('.logo').style.color = 'var(--off-white)';
+    }
+  });
+
+  // Form submit → WhatsApp
+  function submitForm(e) {
+    e.preventDefault();
+    const nome = document.querySelector('input[placeholder="Seu nome completo"]').value;
+    const tel = document.querySelector('input[type="tel"]').value;
+    const tipo = document.querySelector('select').value;
+    const msg = document.querySelector('textarea').value;
+    const text = encodeURIComponent(`Olá, Sheilla! Me chamo ${nome || '[nome]'}.\nTelefone: ${tel || '-'}\nTipo de projeto: ${tipo || '-'}\nMensagem: ${msg || '-'}`);
+    window.open(`https://wa.me/5524999322402?text=${text}`, '_blank');
+  }
+</script>
+</body>
+</html>
