@@ -62,6 +62,17 @@
     mix-blend-mode: normal;
   }
   .logo span { color: var(--gold); }
+  .logo-img {
+    height: 56px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(201,169,110,.55)) drop-shadow(0 0 16px rgba(201,169,110,.3)) brightness(1.05);
+    transition: filter .4s ease, transform .4s ease;
+  }
+  .logo-img:hover {
+    filter: drop-shadow(0 0 10px rgba(201,169,110,.75)) drop-shadow(0 0 24px rgba(201,169,110,.45)) brightness(1.1);
+    transform: scale(1.03);
+  }
   nav { display: flex; gap: 40px; }
   nav a {
     font-family: 'DM Sans', sans-serif;
@@ -760,7 +771,7 @@
 
 <!-- HEADER -->
 <header>
-  <a href="#" class="logo">Sheilla <span>Soares</span></a>
+  <a href="#" class="logo"><img src="assets/logo-sheilla.png" alt="Sheilla Soares Arquitetura" class="logo-img"></a>
   <nav>
     <a href="#sobre">Sobre</a>
     <a href="#servicos">Serviços</a>
