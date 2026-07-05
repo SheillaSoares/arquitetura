@@ -431,13 +431,12 @@
   .proj-card:hover img { transform: scale(1.03); filter: grayscale(0%); }
   .proj-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(17,17,17,.8) 0%, transparent 55%);
-    opacity: 0;
+    background: linear-gradient(to top, rgba(17,17,17,.85) 0%, rgba(17,17,17,.15) 45%, transparent 65%);
+    opacity: 1;
     transition: opacity .4s;
     display: flex; align-items: flex-end;
     padding: 32px;
   }
-  .proj-card:hover .proj-overlay { opacity: 1; }
   .proj-info h3 {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.5rem;
@@ -721,7 +720,6 @@
     .hero-content { flex-direction: column; align-items: flex-start; gap: 24px; padding: 0 20px 48px; }
     .hero-right { display: none; }
     .projetos-grid { columns: 1; padding: 0 20px; }
-    .proj-overlay { opacity: 1; }
     .form-area { padding: 36px 24px; }
     footer { padding: 36px 20px; }
     .cta-band { padding: 48px 20px; }
