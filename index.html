@@ -729,6 +729,453 @@
     *, *::before, *::after { transition: none !important; animation: none !important; }
     .reveal { opacity: 1; transform: none; }
   }
+
+  /* ══════════════════════════════════════════════════════════
+     PORTFÓLIO ADMINISTRÁVEL · FILTROS · VISUALIZADOR · PAINEL
+     (acrescentado; não altera as regras acima)
+     ══════════════════════════════════════════════════════════ */
+
+  /* ── Serviço: chamada para ação ── */
+  .servico-cta {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 11px 26px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background .35s, color .35s;
+  }
+  .servico-cta:hover { background: var(--gold); color: var(--black); }
+
+  /* ── Portfólio: cabeçalho, botão admin e filtros ── */
+  #projetos .header-area {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .admin-link {
+    background: none;
+    border: 0;
+    border-bottom: 1px solid rgba(201,169,110,.45);
+    padding: 4px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .7rem;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--stone);
+    cursor: pointer;
+    transition: color .3s, border-color .3s;
+  }
+  .admin-link:hover, .admin-link:focus-visible { color: var(--gold); border-color: var(--gold); outline: none; }
+
+  .proj-filters {
+    display: flex;
+    gap: 34px;
+    padding: 0 56px 40px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: none;
+    border: 0;
+    padding: 6px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .78rem;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--stone);
+    cursor: pointer;
+    position: relative;
+    transition: color .3s;
+  }
+  .filter-btn::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width .4s ease;
+  }
+  .filter-btn:hover { color: var(--black); }
+  .filter-btn.active { color: var(--black); }
+  .filter-btn.active::after { width: 100%; }
+  .filter-btn:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
+
+  .proj-empty {
+    padding: 40px 56px 0;
+    font-size: .95rem;
+    color: var(--stone);
+    line-height: 1.8;
+  }
+  .proj-card { outline: none; }
+  .proj-card:focus-visible { box-shadow: 0 0 0 2px var(--gold); }
+  .proj-card.enter { animation: projEnter .6s ease both; }
+  @keyframes projEnter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .proj-count {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(17,17,17,.62);
+    color: var(--off-white);
+    font-size: .66rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    backdrop-filter: blur(4px);
+  }
+  .proj-info span.proj-meta { display: block; }
+
+  /* ── Visualizador de projeto (galeria) ── */
+  .pv {
+    position: fixed; inset: 0;
+    z-index: 1000;
+    background: rgba(14,14,13,.96);
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    animation: fadeIn .3s ease;
+  }
+  .pv[hidden] { display: none; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .pv-close, .adm-x {
+    position: absolute;
+    top: 18px; right: 22px;
+    width: 44px; height: 44px;
+    background: none;
+    border: 1px solid rgba(248,246,242,.25);
+    color: var(--off-white);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 3;
+    transition: background .3s, color .3s, border-color .3s;
+  }
+  .pv-close:hover, .adm-x:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
+  .pv-stage {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    padding: 70px 70px 40px;
+    min-height: 0;
+    touch-action: pan-y;
+  }
+  .pv-stage img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: opacity .25s ease;
+  }
+  .pv-stage img.fading { opacity: 0; }
+  .pv-nav {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: rgba(248,246,242,.06);
+    border: 1px solid rgba(248,246,242,.2);
+    color: var(--off-white);
+    font-size: 1.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .3s, color .3s;
+  }
+  .pv-nav:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+  .pv-nav.prev { left: 16px; }
+  .pv-nav.next { right: 16px; }
+  .pv-nav[hidden] { display: none; }
+  .pv-count {
+    position: absolute;
+    bottom: 14px; left: 50%;
+    transform: translateX(-50%);
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: rgba(248,246,242,.5);
+  }
+  .pv-side {
+    background: var(--dark-bg);
+    border-left: 1px solid rgba(248,246,242,.07);
+    padding: 80px 36px 36px;
+    overflow-y: auto;
+    color: var(--off-white);
+  }
+  .pv-eyebrow {
+    font-size: .72rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .pv-side h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.1rem;
+    font-weight: 300;
+    line-height: 1.15;
+  }
+  .pv-side .divider { margin: 24px 0; }
+  .pv-desc {
+    font-size: .9rem;
+    line-height: 1.85;
+    color: rgba(248,246,242,.62);
+    white-space: pre-line;
+  }
+  .pv-thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+    margin-top: 32px;
+  }
+  .pv-thumbs button {
+    padding: 0; border: 1px solid transparent; background: #222; cursor: pointer;
+    aspect-ratio: 1; overflow: hidden; opacity: .55;
+    transition: opacity .3s, border-color .3s;
+  }
+  .pv-thumbs button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pv-thumbs button:hover { opacity: .9; }
+  .pv-thumbs button.on { opacity: 1; border-color: var(--gold); }
+
+  /* ── Painel administrativo ── */
+  .adm {
+    position: fixed; inset: 0;
+    z-index: 1100;
+    background: var(--off-white);
+    overflow-y: auto;
+    animation: fadeIn .3s ease;
+  }
+  .adm[hidden], .adm-modal[hidden] { display: none; }
+  .adm-bar {
+    position: sticky; top: 0; z-index: 4;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 20px 88px 20px 40px;
+    background: rgba(248,246,242,.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--beige);
+  }
+  .adm-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 300;
+  }
+  .adm-title em { font-style: italic; color: var(--stone); }
+  .adm-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .adm .adm-x {
+    border-color: rgba(17,17,17,.2);
+    color: var(--black);
+  }
+  .adm-btn {
+    padding: 12px 26px;
+    background: transparent;
+    border: 1px solid rgba(17,17,17,.25);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .72rem;
+    font-weight: 400;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .3s, color .3s, border-color .3s, opacity .3s;
+  }
+  .adm-btn:hover:not(:disabled) { background: var(--black); color: var(--off-white); border-color: var(--black); }
+  .adm-btn.gold { background: var(--gold); border-color: var(--gold); }
+  .adm-btn.gold:hover:not(:disabled) { background: var(--black); border-color: var(--black); color: var(--gold); }
+  .adm-btn.danger { color: #a33; border-color: rgba(170,51,51,.35); }
+  .adm-btn.danger:hover:not(:disabled) { background: #a33; border-color: #a33; color: #fff; }
+  .adm-btn.sm { padding: 8px 16px; font-size: .66rem; }
+  .adm-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .adm-btn:focus-visible, .adm-x:focus-visible, .pv-close:focus-visible, .pv-nav:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .adm-body { max-width: 980px; margin: 0 auto; padding: 36px 24px 90px; }
+  .adm-hint { font-size: .85rem; color: var(--stone); line-height: 1.7; margin-bottom: 26px; }
+  .adm-row {
+    display: grid;
+    grid-template-columns: 96px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid var(--beige);
+    margin-bottom: 10px;
+  }
+  .adm-thumb {
+    width: 96px; height: 72px;
+    background: var(--beige);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--stone); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; text-align: center;
+  }
+  .adm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .adm-info h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-weight: 400;
+    line-height: 1.2; margin-bottom: 4px;
+    word-break: break-word;
+  }
+  .adm-info div { font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone); }
+  .adm-row-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .adm-empty {
+    text-align: center;
+    padding: 56px 24px;
+    background: #fff;
+    border: 1px dashed rgba(17,17,17,.18);
+    color: var(--stone);
+    line-height: 1.8;
+    font-size: .95rem;
+  }
+  .adm-empty .adm-btn { margin-top: 18px; }
+  .adm-import {
+    margin-top: 18px;
+    padding: 22px 24px;
+    background: var(--beige);
+    font-size: .85rem; line-height: 1.7; color: #555;
+  }
+  .adm-import .adm-btn { margin-top: 12px; }
+
+  .adm-modal {
+    position: fixed; inset: 0;
+    z-index: 1200;
+    background: rgba(14,14,13,.6);
+    backdrop-filter: blur(3px);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 5vh 16px;
+    overflow-y: auto;
+    animation: fadeIn .25s ease;
+  }
+  #admLogin { z-index: 1300; }   /* o login precisa ficar acima de qualquer janela (sessão expirada no meio de uma ação) */
+  .adm-dialog {
+    width: 100%; max-width: 440px;
+    background: var(--off-white);
+    padding: 40px 36px 34px;
+    position: relative;
+    margin: auto 0;
+  }
+  .adm-dialog.wide { max-width: 760px; }
+  .adm-dialog h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem; font-weight: 300;
+    margin-bottom: 8px;
+  }
+  .adm-dialog p.sub { font-size: .88rem; color: #666; line-height: 1.7; margin-bottom: 24px; }
+  .adm-dialog .form-group input,
+  .adm-dialog .form-group select,
+  .adm-dialog .form-group textarea { background: #fff; border: 1px solid var(--beige); }
+  .adm-dialog .form-group input:focus,
+  .adm-dialog .form-group select:focus,
+  .adm-dialog .form-group textarea:focus { border-color: var(--gold); }
+  .adm-dialog .form-group small { display: block; margin-top: 6px; font-size: .72rem; color: var(--stone); }
+  .req { color: var(--gold); }
+  .adm-pass { position: relative; }
+  .adm-pass button {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: none; border: 0; padding: 8px 10px; cursor: pointer;
+    font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--stone);
+  }
+  .adm-pass button:hover { color: var(--black); }
+  .adm-pass input { padding-right: 84px; }
+  .adm-msg {
+    min-height: 1.3em;
+    font-size: .82rem; line-height: 1.5;
+    color: #a33;
+    margin: 4px 0 14px;
+  }
+  .adm-msg.ok { color: #3a6b3a; }
+  .adm-dialog-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 8px; }
+
+  .adm-drop {
+    display: block;
+    border: 1px dashed rgba(17,17,17,.28);
+    background: #fff;
+    padding: 26px 16px;
+    text-align: center;
+    font-size: .85rem; color: #666; line-height: 1.6;
+    cursor: pointer;
+    transition: border-color .3s, background .3s;
+  }
+  .adm-drop:hover, .adm-drop.over { border-color: var(--gold); background: rgba(201,169,110,.08); }
+  .adm-drop strong { color: var(--black); font-weight: 500; }
+  .adm-drop input { display: none; }
+  .adm-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .adm-photo {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--beige);
+  }
+  .adm-photo.is-cover { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .adm-photo .img { aspect-ratio: 4/3; background: var(--beige); overflow: hidden; }
+  .adm-photo .img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .adm-photo .badge {
+    position: absolute; top: 8px; left: 8px;
+    background: var(--gold); color: var(--black);
+    font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+    padding: 4px 8px;
+  }
+  .adm-photo .badge.new { background: var(--black); color: var(--off-white); left: auto; right: 8px; }
+  .adm-photo .tools { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px; }
+  .adm-photo .tools button {
+    flex: 1 1 auto;
+    background: none; border: 1px solid var(--beige);
+    padding: 6px 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .6rem; letter-spacing: .1em; text-transform: uppercase;
+    color: #555; cursor: pointer;
+    transition: background .25s, color .25s;
+  }
+  .adm-photo .tools button:hover:not(:disabled) { background: var(--black); color: var(--off-white); }
+  .adm-photo .tools button.rm:hover:not(:disabled) { background: #a33; }
+  .adm-photo .tools button:disabled { opacity: .4; cursor: default; }
+  .adm-progress { height: 3px; background: var(--beige); margin: 0 0 14px; overflow: hidden; }
+  .adm-progress > i { display: block; height: 100%; width: 0; background: var(--gold); transition: width .3s ease; }
+
+  .adm-toasts {
+    position: fixed;
+    left: 50%; bottom: 28px;
+    transform: translateX(-50%);
+    z-index: 1400;
+    display: flex; flex-direction: column; gap: 8px; align-items: center;
+    pointer-events: none;
+    width: calc(100% - 32px);
+    max-width: 460px;
+  }
+  .adm-toast {
+    background: var(--black); color: var(--off-white);
+    padding: 13px 20px;
+    font-size: .85rem; line-height: 1.5;
+    border-left: 3px solid var(--gold);
+    animation: projEnter .35s ease both;
+    box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    width: 100%;
+  }
+  .adm-toast.err { border-left-color: #d55; }
+
+  @media (max-width: 1024px) {
+    .proj-filters { padding: 0 32px 36px; }
+    .proj-empty { padding: 32px 32px 0; }
+    .pv { grid-template-columns: 1fr; grid-template-rows: minmax(0, 58vh) 1fr; }
+    .pv-stage { padding: 64px 16px 28px; }
+    .pv-nav.prev { left: 6px; } .pv-nav.next { right: 6px; }
+    .pv-side { border-left: 0; border-top: 1px solid rgba(248,246,242,.07); padding: 28px 24px 40px; }
+  }
+  @media (max-width: 680px) {
+    .proj-filters { padding: 0 20px 32px; gap: 22px; }
+    .proj-empty { padding: 28px 20px 0; }
+    .adm-bar { padding: 16px 70px 16px 20px; }
+    .adm-title { font-size: 1.5rem; }
+    .adm-body { padding: 24px 14px 80px; }
+    .adm-row { grid-template-columns: 76px 1fr; gap: 14px; }
+    .adm-thumb { width: 76px; height: 60px; }
+    .adm-row-actions { grid-column: 1 / -1; justify-content: flex-start; }
+    .adm-dialog { padding: 32px 20px 24px; }
+    .adm-dialog .form-row { grid-template-columns: 1fr; }
+    .adm-photos { grid-template-columns: repeat(2, 1fr); }
+    .pv-close, .adm-x { top: 12px; right: 12px; }
+  }
 </style>
 </head>
 <body>
@@ -865,16 +1312,31 @@
       <h3>Gerenciamento de Obra</h3>
       <p>Acompanhamento técnico da execução, do início à entrega das chaves.</p>
     </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">11</span>
+      <span class="servico-icon">💻</span>
+      <h3>Projetos de Arquitetura Online</h3>
+      <p>Desenvolvimento de projetos de arquitetura online, com atendimento personalizado e praticidade para clientes de diferentes localidades. Todo o processo é realizado de forma digital, permitindo alinhar necessidades, compartilhar referências, acompanhar as etapas do projeto e receber as entregas combinadas sem a necessidade de reuniões presenciais.</p>
+      <a class="servico-cta" href="https://wa.me/5524999322402?text=Olá,%20Sheilla!%20Gostaria%20de%20solicitar%20um%20projeto%20de%20arquitetura%20online." target="_blank" rel="noopener">Solicitar Projeto Online</a>
+    </div>
   </div>
 </section>
 
 <!-- PROJETOS -->
 <section id="projetos">
   <div class="header-area">
-    <div class="section-eyebrow reveal">Portfólio</div>
-    <h2 class="section-title reveal">Projetos <em>selecionados</em></h2>
+    <div>
+      <div class="section-eyebrow reveal">Portfólio</div>
+      <h2 class="section-title reveal">Projetos <em>selecionados</em></h2>
+    </div>
+    <button type="button" class="admin-link" id="adminOpen">Gerenciar Portfólio</button>
   </div>
-  <div class="projetos-grid">
+  <div class="proj-filters" role="group" aria-label="Filtrar projetos por categoria">
+    <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">Todos</button>
+    <button type="button" class="filter-btn" data-filter="Interior" aria-pressed="false">Interiores</button>
+    <button type="button" class="filter-btn" data-filter="Exterior" aria-pressed="false">Exteriores</button>
+  </div>
+  <div class="projetos-grid" id="projetosGrid">
     <div class="proj-card reveal">
       <img src="assets/Rialto RJ.jpg" alt="Rialto - RJ">
       <div class="proj-overlay">
@@ -948,6 +1410,7 @@
       </div>
     </div>
   </div>
+  <p class="proj-empty" id="projEmpty" role="status" hidden></p>
 </section>
 
 <!-- PROCESSO -->
@@ -1096,6 +1559,132 @@
   </div>
 </a>
 
+<!-- VISUALIZADOR DE PROJETO -->
+<div class="pv" id="pv" role="dialog" aria-modal="true" aria-labelledby="pvTitle" hidden>
+  <button class="pv-close" id="pvClose" type="button" aria-label="Fechar">&times;</button>
+  <div class="pv-stage" id="pvStage">
+    <button class="pv-nav prev" id="pvPrev" type="button" aria-label="Foto anterior">&#8249;</button>
+    <img id="pvImg" alt="">
+    <button class="pv-nav next" id="pvNext" type="button" aria-label="Próxima foto">&#8250;</button>
+    <div class="pv-count" id="pvCount"></div>
+  </div>
+  <aside class="pv-side">
+    <div class="pv-eyebrow" id="pvMeta"></div>
+    <h3 id="pvTitle"></h3>
+    <div class="divider"></div>
+    <p class="pv-desc" id="pvDesc"></p>
+    <div class="pv-thumbs" id="pvThumbs"></div>
+  </aside>
+</div>
+
+<!-- PAINEL ADMINISTRATIVO -->
+<div class="adm" id="adm" role="dialog" aria-modal="true" aria-labelledby="admTitle" hidden>
+  <div class="adm-bar">
+    <div class="adm-title" id="admTitle">Gerenciar <em>Portfólio</em></div>
+    <div class="adm-actions">
+      <button class="adm-btn gold" id="admNew" type="button">+ Adicionar Projeto</button>
+      <button class="adm-btn" id="admLogout" type="button">Sair</button>
+    </div>
+    <button class="adm-x" id="admClose" type="button" aria-label="Fechar painel">&times;</button>
+  </div>
+  <div class="adm-body">
+    <p class="adm-hint">Tudo o que você alterar aqui aparece automaticamente no portfólio do site. Use as setas para mudar a ordem de exibição.</p>
+    <div id="admList"></div>
+    <div class="adm-import" id="admImport" hidden>
+      <strong>Projetos que já estão no site</strong><br>
+      Quer trazer os projetos atuais do portfólio para o painel, para poder editá-los? Eles serão copiados com as mesmas fotos, títulos e categorias.
+      <br><button class="adm-btn sm" id="admImportBtn" type="button">Importar projetos atuais</button>
+      <div class="adm-msg" id="admImportMsg" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="adm-modal" id="admLogin" role="dialog" aria-modal="true" aria-labelledby="admLoginTitle" hidden>
+  <form class="adm-dialog" id="admLoginForm" autocomplete="off">
+    <h3 id="admLoginTitle">Área restrita</h3>
+    <p class="sub">Digite a senha para gerenciar o portfólio.</p>
+    <div class="form-group">
+      <label for="admPass">Senha</label>
+      <div class="adm-pass">
+        <input type="password" id="admPass" autocomplete="current-password" required>
+        <button type="button" id="admPassToggle" aria-label="Mostrar ou ocultar a senha">Mostrar</button>
+      </div>
+    </div>
+    <div class="adm-msg" id="admLoginMsg" role="alert"></div>
+    <div class="adm-dialog-actions">
+      <button class="adm-btn" type="button" id="admLoginCancel">Cancelar</button>
+      <button class="adm-btn gold" type="submit" id="admLoginSubmit">Entrar</button>
+    </div>
+  </form>
+</div>
+
+<!-- FORMULÁRIO DE PROJETO -->
+<div class="adm-modal" id="admForm" role="dialog" aria-modal="true" aria-labelledby="admFormTitle" hidden>
+  <form class="adm-dialog wide" id="admFormEl" novalidate>
+    <h3 id="admFormTitle">Novo projeto</h3>
+    <p class="sub">Campos com <span class="req">*</span> são obrigatórios.</p>
+    <div class="form-group">
+      <label for="fTitulo">Título do projeto <span class="req">*</span></label>
+      <input type="text" id="fTitulo" maxlength="120" placeholder="Ex.: Residência Aurora">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="fCategoria">Categoria <span class="req">*</span></label>
+        <select id="fCategoria">
+          <option value="">Selecione...</option>
+          <option value="Interior">Interior</option>
+          <option value="Exterior">Exterior</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fLocal">Localização</label>
+        <input type="text" id="fLocal" maxlength="120" placeholder="Cidade, estado ou região">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="fDesc">Descrição</label>
+      <textarea id="fDesc" maxlength="3000" placeholder="Conte um pouco sobre o projeto..."></textarea>
+    </div>
+    <div class="form-group">
+      <label for="fPos">Posição na lista</label>
+      <select id="fPos"></select>
+      <small>A posição 1 aparece primeiro no portfólio.</small>
+    </div>
+    <div class="form-group">
+      <label>Fotos</label>
+      <label class="adm-drop" id="fDrop">
+        <input type="file" id="fFiles" accept="image/jpeg,image/png,image/webp" multiple>
+        <strong>Clique para escolher as fotos</strong> ou arraste-as até aqui<br>
+        <span style="font-size:.75rem">JPG, PNG ou WEBP. As imagens são otimizadas automaticamente.</span>
+      </label>
+      <div class="adm-photos" id="fPhotos"></div>
+      <small>Toque em “Capa” para escolher a imagem que aparece em destaque no portfólio.</small>
+    </div>
+    <div class="adm-progress" id="fProgress" hidden><i></i></div>
+    <div class="adm-msg" id="fMsg" role="alert"></div>
+    <div class="adm-dialog-actions">
+      <button class="adm-btn" type="button" id="fCancel">Cancelar</button>
+      <button class="adm-btn gold" type="submit" id="fSave">Salvar projeto</button>
+    </div>
+  </form>
+</div>
+
+<!-- CONFIRMAR EXCLUSÃO -->
+<div class="adm-modal" id="admConfirm" role="alertdialog" aria-modal="true" aria-labelledby="admConfirmTitle" aria-describedby="admConfirmText" hidden>
+  <div class="adm-dialog">
+    <h3 id="admConfirmTitle">Excluir projeto?</h3>
+    <p class="sub" id="admConfirmText">Tem certeza de que deseja excluir este projeto? Essa ação removerá o projeto do portfólio.</p>
+    <div class="adm-msg" id="admConfirmMsg" role="alert"></div>
+    <div class="adm-dialog-actions">
+      <button class="adm-btn" type="button" id="admConfirmNo">Cancelar</button>
+      <button class="adm-btn danger" type="button" id="admConfirmYes">Sim, excluir</button>
+    </div>
+  </div>
+</div>
+
+<div class="adm-toasts" id="admToasts" aria-live="polite"></div>
+
 <script>
   // Cursor suave
   const cursor = document.getElementById('cursor');
@@ -1155,6 +1744,746 @@
     const text = encodeURIComponent(`Olá, Sheilla! Me chamo ${nome || '[nome]'}.\nTelefone: ${tel || '-'}\nTipo de projeto: ${tipo || '-'}\nMensagem: ${msg || '-'}`);
     window.open(`https://wa.me/5524999322402?text=${text}`, '_blank');
   }
+</script>
+<script>
+/* ══════════════════════════════════════════════════════════
+   PORTFÓLIO DINÂMICO + PAINEL ADMINISTRATIVO
+   Os dados e as fotos ficam no Google Apps Script / Drive.
+   ══════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /* >>> CONFIGURAÇÃO: cole aqui a URL do App da Web (termina em /exec). <<<
+     Enquanto estiver vazio, o site mostra os projetos fixos do HTML. */
+  var PORTFOLIO_API_URL = 'https://script.google.com/macros/s/AKfycbwSA7pQVIzP-hqb1EDNKh3_Pby2s21OqRo8D32VYmyy7eZQzNcv9yzlEpwQJ_5gisJl/exec';
+
+  var CAT_LABEL = { Interior: 'Interior', Exterior: 'Exterior' };
+  var CACHE_KEY = 'portfolio_cache_v1';
+  var TOKEN_KEY = 'portfolio_admin_token';
+  var MAX_SIDE = 1800;          // maior lado da foto após otimizar
+  var JPEG_QUALITY = 0.85;
+  var MAX_ORIGINAL = 30 * 1024 * 1024;
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === 'class') n.className = attrs[k];
+      else if (k === 'text') n.textContent = attrs[k];
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    });
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ok */ } }
+  function ssGet(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function ssSet(k, v) { try { if (v == null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { /* ok */ } }
+
+  /* ─────────────── Imagens ─────────────── */
+  function photoSrc(p, w) {
+    return p.url ? p.url : 'https://lh3.googleusercontent.com/d/' + encodeURIComponent(p.id) + '=w' + w;
+  }
+  function setImg(img, p, w) {
+    img.onerror = function () {
+      img.onerror = null;
+      if (!p.url) img.src = 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(p.id) + '&sz=w' + w;
+    };
+    img.src = photoSrc(p, w);
+  }
+
+  /* ─────────────── Estado ─────────────── */
+  var grid = $('projetosGrid');
+  var emptyMsg = $('projEmpty');
+  var legacy = [];          // projetos fixos do HTML
+  var projects = [];        // o que está sendo exibido
+  var serverList = null;    // lista vinda do servidor (null = ainda não carregou)
+  var hadProjects = false;
+  var filter = 'all';
+
+  function normalizeServer(list) {
+    return (list || []).map(function (p) {
+      var ids = (p.fotos || []).slice();
+      var ci = ids.indexOf(p.capa);
+      if (ci > 0) { ids.splice(ci, 1); ids.unshift(p.capa); }
+      return {
+        id: p.id, titulo: p.titulo || '', descricao: p.descricao || '',
+        categoria: p.categoria || '', localizacao: p.localizacao || '',
+        capa: p.capa || '', fotos: ids.map(function (id) { return { id: id }; }),
+        rawFotos: (p.fotos || []).slice()
+      };
+    });
+  }
+
+  function readLegacy() {
+    return Array.prototype.map.call(grid.querySelectorAll('.proj-card'), function (c, i) {
+      var img = c.querySelector('img');
+      var span = c.querySelector('.proj-info span');
+      return {
+        id: 'legacy-' + i, legacy: true,
+        titulo: (c.querySelector('h3').textContent || '').trim(),
+        categoria: span ? span.textContent.trim() : '',
+        localizacao: '', descricao: '',
+        fotos: [{ url: img.getAttribute('src') }]
+      };
+    });
+  }
+
+  /* ─────────────── Cartões do portfólio ─────────────── */
+  function bindCursor(node) {
+    if (typeof cursor === 'undefined') return;
+    node.addEventListener('mouseenter', function () { cursor.classList.add('expand'); });
+    node.addEventListener('mouseleave', function () { cursor.classList.remove('expand'); });
+  }
+
+  function renderGrid() {
+    var list = projects.filter(function (p) { return filter === 'all' || p.categoria === filter; });
+    grid.innerHTML = '';
+    list.forEach(function (p, i) {
+      var img = el('img', { alt: p.titulo, loading: i < 6 ? 'eager' : 'lazy', decoding: 'async' });
+      setImg(img, p.fotos[0] || { url: '' }, 900);
+      var meta = [CAT_LABEL[p.categoria] || p.categoria, p.localizacao].filter(Boolean).join(' · ');
+      var card = el('div', {
+        'class': 'proj-card enter', role: 'button', tabindex: '0',
+        'aria-label': 'Ver projeto ' + p.titulo
+      }, [
+        img,
+        p.fotos.length > 1 ? el('div', { 'class': 'proj-count', text: p.fotos.length + ' fotos' }) : null,
+        el('div', { 'class': 'proj-overlay' }, [
+          el('div', { 'class': 'proj-info' }, [
+            el('h3', { text: p.titulo }),
+            el('span', { 'class': 'proj-meta', text: meta })
+          ])
+        ])
+      ]);
+      card.style.animationDelay = Math.min(i, 8) * 60 + 'ms';
+      card.addEventListener('click', function () { openViewer(p, card); });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openViewer(p, card); }
+      });
+      bindCursor(card);
+      grid.appendChild(card);
+    });
+
+    var msg = '';
+    if (!list.length) {
+      if (!projects.length) msg = 'Em breve, novos projetos por aqui.';
+      else msg = 'Nenhum projeto nesta categoria por enquanto.';
+    }
+    emptyMsg.textContent = msg;
+    emptyMsg.hidden = !msg;
+
+    Array.prototype.forEach.call(document.querySelectorAll('.filter-btn'), function (b) {
+      var on = b.getAttribute('data-filter') === filter;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.filter-btn'), function (b) {
+    b.addEventListener('click', function () { filter = b.getAttribute('data-filter'); renderGrid(); });
+  });
+
+  function applyServerList(list, had) {
+    serverList = normalizeServer(list);
+    hadProjects = !!had;
+    if (serverList.length) projects = serverList;
+    else projects = hadProjects ? [] : legacy.slice();   // se ela apagou tudo de propósito, não volta o antigo
+    renderGrid();
+  }
+
+  /* ─────────────── Visualizador (galeria) ─────────────── */
+  var pv = $('pv'), pvImg = $('pvImg'), pvThumbs = $('pvThumbs');
+  var pvState = { p: null, i: 0, opener: null };
+
+  function openViewer(p, opener) {
+    if (!p.fotos.length) return;
+    pvState = { p: p, i: 0, opener: opener };
+    $('pvTitle').textContent = p.titulo;
+    $('pvMeta').textContent = [CAT_LABEL[p.categoria] || p.categoria, p.localizacao].filter(Boolean).join(' · ');
+    var d = $('pvDesc'); d.textContent = p.descricao || ''; d.hidden = !p.descricao;
+    var many = p.fotos.length > 1;
+    $('pvPrev').hidden = !many; $('pvNext').hidden = !many;
+    pvThumbs.innerHTML = '';
+    pvThumbs.hidden = !many;
+    if (many) p.fotos.forEach(function (ph, i) {
+      var t = el('img', { alt: 'Foto ' + (i + 1), loading: 'lazy' });
+      setImg(t, ph, 200);
+      var b = el('button', { type: 'button', 'aria-label': 'Ver foto ' + (i + 1) }, [t]);
+      b.addEventListener('click', function () { showPhoto(i); });
+      pvThumbs.appendChild(b);
+    });
+    pv.hidden = false;
+    document.body.style.overflow = 'hidden';
+    showPhoto(0, true);
+    $('pvClose').focus();
+  }
+
+  function showPhoto(i, instant) {
+    var p = pvState.p; if (!p) return;
+    var n = p.fotos.length;
+    pvState.i = (i + n) % n;
+    var ph = p.fotos[pvState.i];
+    if (!instant) pvImg.classList.add('fading');
+    var next = new Image();
+    next.onload = next.onerror = function () {
+      setImg(pvImg, ph, 1800);
+      pvImg.alt = p.titulo + ' — foto ' + (pvState.i + 1);
+      pvImg.classList.remove('fading');
+    };
+    next.src = photoSrc(ph, 1800);
+    $('pvCount').textContent = n > 1 ? (pvState.i + 1) + ' / ' + n : '';
+    Array.prototype.forEach.call(pvThumbs.children, function (b, k) { b.classList.toggle('on', k === pvState.i); });
+  }
+
+  function closeViewer() {
+    if (pv.hidden) return;
+    pv.hidden = true;
+    pvImg.removeAttribute('src');
+    if (!anyOverlayOpen()) document.body.style.overflow = '';
+    if (pvState.opener && document.contains(pvState.opener)) pvState.opener.focus();
+    pvState = { p: null, i: 0, opener: null };
+  }
+
+  $('pvClose').addEventListener('click', closeViewer);
+  $('pvPrev').addEventListener('click', function () { showPhoto(pvState.i - 1); });
+  $('pvNext').addEventListener('click', function () { showPhoto(pvState.i + 1); });
+  pv.addEventListener('click', function (e) { if (e.target === pv || e.target === $('pvStage')) closeViewer(); });
+  (function swipe() {
+    var x0 = null, stage = $('pvStage');
+    stage.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (x0 == null) return;
+      var dx = e.changedTouches[0].clientX - x0; x0 = null;
+      if (Math.abs(dx) > 45 && pvState.p && pvState.p.fotos.length > 1) showPhoto(pvState.i + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  })();
+
+  function anyOverlayOpen() {
+    return !pv.hidden || !$('adm').hidden || !$('admLogin').hidden || !$('admForm').hidden || !$('admConfirm').hidden;
+  }
+
+  /* ─────────────── API ─────────────── */
+  function ApiError(code, message) { this.code = code; this.message = message; }
+  ApiError.prototype = Object.create(Error.prototype);
+
+  function apiConfigured() { return !!PORTFOLIO_API_URL; }
+
+  function api(action, payload, withToken) {
+    if (!apiConfigured()) {
+      return Promise.reject(new ApiError('nao_configurado', 'O painel ainda não foi conectado ao servidor. Peça ao responsável pelo site para configurar o endereço do Apps Script.'));
+    }
+    var body = { action: action };
+    Object.keys(payload || {}).forEach(function (k) { body[k] = payload[k]; });
+    if (withToken) body.token = ssGet(TOKEN_KEY) || '';
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 90000) : null;
+    return fetch(PORTFOLIO_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },   // evita pré-verificação CORS
+      body: JSON.stringify(body),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (res) {
+      return res.json().catch(function () { throw new ApiError('resposta', 'O servidor respondeu algo inesperado. Tente novamente.'); });
+    }, function () {
+      throw new ApiError('rede', 'Não foi possível conectar. Verifique sua internet e tente de novo.');
+    }).then(function (data) {
+      if (timer) clearTimeout(timer);
+      if (!data || data.ok !== true) throw new ApiError((data && data.error) || 'erro', (data && data.message) || 'Algo deu errado. Tente novamente.');
+      return data;
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
+  }
+
+  /** Chamada administrativa: se a sessão expirou, pede a senha de novo e repete uma vez. */
+  function adminCall(action, payload) {
+    return api(action, payload, true).catch(function (err) {
+      if (err.code !== 'sessao_invalida') throw err;
+      ssSet(TOKEN_KEY, null);
+      return requestLogin('Sua sessão expirou. Digite a senha para continuar.').then(function () {
+        return api(action, payload, true);
+      });
+    });
+  }
+
+  function loadPublic() {
+    if (!apiConfigured()) return Promise.resolve();
+    var cached = lsGet(CACHE_KEY);
+    if (cached) {
+      try { var c = JSON.parse(cached); if (c && c.projects && c.projects.length) applyServerList(c.projects, true); } catch (e) { /* ignora */ }
+    }
+    return fetch(PORTFOLIO_API_URL + (PORTFOLIO_API_URL.indexOf('?') < 0 ? '?' : '&') + 'action=list&_=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || d.ok !== true) throw new Error('bad');
+        lsSet(CACHE_KEY, JSON.stringify({ projects: d.projects, hadProjects: d.hadProjects }));
+        applyServerList(d.projects, d.hadProjects);
+      })
+      .catch(function () { /* mantém o que já está na tela (cache ou projetos fixos) */ });
+  }
+
+  function pushList(list) {
+    lsSet(CACHE_KEY, JSON.stringify({ projects: list, hadProjects: true }));
+    applyServerList(list, true);
+    renderAdminList();
+  }
+
+  /* ─────────────── Toasts ─────────────── */
+  function toast(msg, isErr) {
+    var t = el('div', { 'class': 'adm-toast' + (isErr ? ' err' : ''), text: msg });
+    $('admToasts').appendChild(t);
+    setTimeout(function () { t.remove(); }, isErr ? 6000 : 3500);
+  }
+
+  /* ─────────────── Login ─────────────── */
+  var loginWaiters = null;
+
+  function requestLogin(message) {
+    return new Promise(function (resolve, reject) {
+      if (loginWaiters) { loginWaiters.push({ resolve: resolve, reject: reject }); return; }
+      loginWaiters = [{ resolve: resolve, reject: reject }];
+      $('admPass').value = '';
+      $('admPass').type = 'password';
+      $('admPassToggle').textContent = 'Mostrar';
+      $('admLoginMsg').textContent = message || '';
+      $('admLoginMsg').className = 'adm-msg';
+      $('admLogin').hidden = false;
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { $('admPass').focus(); }, 30);
+    });
+  }
+  function finishLogin(ok) {
+    $('admLogin').hidden = true;
+    if (!anyOverlayOpen()) document.body.style.overflow = '';
+    var w = loginWaiters || []; loginWaiters = null;
+    w.forEach(function (x) { ok ? x.resolve() : x.reject(new ApiError('cancelado', 'Login cancelado.')); });
+  }
+
+  $('admPassToggle').addEventListener('click', function () {
+    var i = $('admPass'); var show = i.type === 'password';
+    i.type = show ? 'text' : 'password';
+    this.textContent = show ? 'Ocultar' : 'Mostrar';
+    i.focus();
+  });
+  $('admLoginCancel').addEventListener('click', function () { finishLogin(false); });
+  $('admLogin').addEventListener('mousedown', function (e) { if (e.target === this) finishLogin(false); });
+  $('admLoginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var pass = $('admPass').value;
+    if (!pass) { $('admLoginMsg').textContent = 'Digite a senha.'; return; }
+    var btn = $('admLoginSubmit'); btn.disabled = true; btn.textContent = 'Entrando…';
+    $('admLoginMsg').textContent = '';
+    api('login', { password: pass }, false).then(function (d) {
+      ssSet(TOKEN_KEY, d.token);
+      $('admPass').value = '';
+      finishLogin(true);
+    }).catch(function (err) {
+      $('admLoginMsg').textContent = err.message;
+      $('admPass').select();
+    }).then(function () { btn.disabled = false; btn.textContent = 'Entrar'; });
+  });
+
+  /* ─────────────── Painel: lista ─────────────── */
+  var adm = $('adm');
+  var busy = false;
+
+  function openAdmin() {
+    if (!apiConfigured()) {
+      alert('O painel ainda não foi conectado ao servidor.\nPeça ao responsável pelo site para colar o endereço do Apps Script no arquivo (PORTFOLIO_API_URL).');
+      return;
+    }
+    var go = function () {
+      adm.hidden = false;
+      document.body.style.overflow = 'hidden';
+      renderAdminList();
+      loadPublic().then(renderAdminList);
+      $('admNew').focus();
+    };
+    if (ssGet(TOKEN_KEY)) go();
+    else requestLogin().then(go).catch(function () { /* cancelou */ });
+  }
+  function closeAdmin() {
+    adm.hidden = true;
+    if (!anyOverlayOpen()) document.body.style.overflow = '';
+    $('adminOpen').focus();
+  }
+
+  $('adminOpen').addEventListener('click', openAdmin);
+  $('admClose').addEventListener('click', closeAdmin);
+  $('admNew').addEventListener('click', function () { openForm(null); });
+  $('admLogout').addEventListener('click', function () {
+    var t = ssGet(TOKEN_KEY);
+    ssSet(TOKEN_KEY, null);
+    if (t) api('logout', { token: t }, false).catch(function () { /* ok */ });
+    closeAdmin();
+    toast('Você saiu do painel.');
+  });
+
+  function renderAdminList() {
+    var box = $('admList');
+    box.innerHTML = '';
+    var list = serverList || [];
+    var imp = $('admImport');
+    imp.hidden = !(serverList && !list.length && !hadProjects && legacy.length);
+
+    if (serverList === null) {
+      box.appendChild(el('div', { 'class': 'adm-empty', text: 'Carregando projetos…' }));
+      return;
+    }
+    if (!list.length) {
+      box.appendChild(el('div', { 'class': 'adm-empty' }, [
+        'Nenhum projeto cadastrado ainda.', el('br'),
+        el('button', { 'class': 'adm-btn gold', type: 'button', text: '+ Adicionar Projeto', onclick: function () { openForm(null); } })
+      ]));
+      return;
+    }
+    list.forEach(function (p, i) {
+      var thumb = el('div', { 'class': 'adm-thumb' });
+      if (p.fotos.length) { var im = el('img', { alt: '', loading: 'lazy' }); setImg(im, p.fotos[0], 300); thumb.appendChild(im); }
+      else thumb.textContent = 'Sem foto';
+      var meta = [CAT_LABEL[p.categoria] || p.categoria, p.localizacao, p.fotos.length + (p.fotos.length === 1 ? ' foto' : ' fotos')].filter(Boolean).join(' · ');
+      var up = el('button', { 'class': 'adm-btn sm', type: 'button', 'aria-label': 'Mover para cima', text: '↑' });
+      var down = el('button', { 'class': 'adm-btn sm', type: 'button', 'aria-label': 'Mover para baixo', text: '↓' });
+      up.disabled = i === 0; down.disabled = i === list.length - 1;
+      up.addEventListener('click', function () { move(i, -1); });
+      down.addEventListener('click', function () { move(i, 1); });
+      box.appendChild(el('div', { 'class': 'adm-row' }, [
+        thumb,
+        el('div', { 'class': 'adm-info' }, [el('h4', { text: p.titulo }), el('div', { text: meta })]),
+        el('div', { 'class': 'adm-row-actions' }, [
+          up, down,
+          el('button', { 'class': 'adm-btn sm', type: 'button', text: 'Editar', onclick: function () { openForm(p); } }),
+          el('button', { 'class': 'adm-btn sm danger', type: 'button', text: 'Excluir', onclick: function () { askDelete(p); } })
+        ])
+      ]));
+    });
+  }
+
+  function move(i, delta) {
+    if (busy) return;
+    var list = serverList.slice();
+    var j = i + delta; if (j < 0 || j >= list.length) return;
+    var t = list[i]; list[i] = list[j]; list[j] = t;
+    busy = true;
+    var before = serverList;
+    serverList = list; renderAdminList();            // atualiza na hora
+    adminCall('reorder', { ids: list.map(function (p) { return p.id; }) })
+      .then(function (d) { pushList(d.projects); toast('Ordem atualizada.'); })
+      .catch(function (err) { serverList = before; renderAdminList(); toast(err.message, true); })
+      .then(function () { busy = false; });
+  }
+
+  /* ─────────────── Painel: excluir ─────────────── */
+  var delTarget = null;
+  function askDelete(p) {
+    delTarget = p;
+    $('admConfirmMsg').textContent = '';
+    $('admConfirmTitle').textContent = 'Excluir “' + p.titulo + '”?';
+    $('admConfirm').hidden = false;
+    $('admConfirmNo').focus();
+  }
+  function closeConfirm() { $('admConfirm').hidden = true; delTarget = null; }
+  $('admConfirmNo').addEventListener('click', closeConfirm);
+  $('admConfirm').addEventListener('mousedown', function (e) { if (e.target === this) closeConfirm(); });
+  $('admConfirmYes').addEventListener('click', function () {
+    if (!delTarget) return;
+    var btn = this, id = delTarget.id, title = delTarget.titulo;
+    btn.disabled = true; btn.textContent = 'Excluindo…';
+    adminCall('delete', { id: id }).then(function (d) {
+      closeConfirm(); pushList(d.projects); toast('Projeto “' + title + '” excluído.');
+    }).catch(function (err) { $('admConfirmMsg').textContent = err.message; })
+      .then(function () { btn.disabled = false; btn.textContent = 'Sim, excluir'; });
+  });
+
+  /* ─────────────── Otimização de imagens (no navegador) ─────────────── */
+  function loadBitmap(file) {
+    if (window.createImageBitmap) {
+      return createImageBitmap(file, { imageOrientation: 'from-image' }).catch(function () { return viaImg(file); });
+    }
+    return viaImg(file);
+  }
+  function viaImg(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), im = new Image();
+      im.onload = function () { URL.revokeObjectURL(url); resolve(im); };
+      im.onerror = function () { URL.revokeObjectURL(url); reject(new Error('img')); };
+      im.src = url;
+    });
+  }
+  /** Reduz para no máx. 1800 px e converte para JPEG de boa qualidade. */
+  function optimizeImage(file) {
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return Promise.reject(new Error('Formato não aceito (' + (file.name || 'arquivo') + '). Use JPG, PNG ou WEBP.'));
+    if (file.size > MAX_ORIGINAL) return Promise.reject(new Error('“' + file.name + '” é muito grande (máx. 30 MB).'));
+    return loadBitmap(file).then(function (bmp) {
+      var w = bmp.width, h = bmp.height, s = Math.min(1, MAX_SIDE / Math.max(w, h));
+      var cw = Math.round(w * s), ch = Math.round(h * s);
+      var c = document.createElement('canvas'); c.width = cw; c.height = ch;
+      var ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, ch);
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(bmp, 0, 0, cw, ch);
+      if (bmp.close) bmp.close();
+      return new Promise(function (resolve, reject) {
+        c.toBlob(function (b) { b ? resolve(b) : reject(new Error('Não foi possível processar “' + file.name + '”.')); }, 'image/jpeg', JPEG_QUALITY);
+      });
+    }, function () { throw new Error('Não foi possível abrir “' + file.name + '”. A imagem pode estar corrompida.'); });
+  }
+  function blobToBase64(blob) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onload = function () { resolve(String(r.result).split(',')[1]); };
+      r.onerror = function () { reject(new Error('Falha ao ler a imagem.')); };
+      r.readAsDataURL(blob);
+    });
+  }
+
+  /* ─────────────── Painel: formulário ─────────────── */
+  var form = { editing: null, photos: [], coverKey: null, saving: false, keyN: 0, originalIds: [], fresh: [] };
+
+  function fMsg(text, ok) { var m = $('fMsg'); m.textContent = text || ''; m.className = 'adm-msg' + (ok ? ' ok' : ''); }
+
+  function fillPositions(total, current) {
+    var s = $('fPos'); s.innerHTML = '';
+    for (var i = 1; i <= total; i++) {
+      var label = i === 1 ? '1 (primeiro)' : (i === total ? i + ' (último)' : String(i));
+      s.appendChild(el('option', { value: String(i), text: label }));
+    }
+    s.value = String(current);
+  }
+
+  function openForm(p) {
+    form = { editing: p, photos: [], coverKey: null, saving: false, keyN: 0, originalIds: [], fresh: [] };
+    $('admFormTitle').textContent = p ? 'Editar projeto' : 'Novo projeto';
+    $('fTitulo').value = p ? p.titulo : '';
+    $('fCategoria').value = p ? p.categoria : '';
+    $('fLocal').value = p ? p.localizacao : '';
+    $('fDesc').value = p ? p.descricao : '';
+    var n = (serverList || []).length;
+    if (p) {
+      fillPositions(n, serverList.indexOf(p) + 1);
+      (p.rawFotos || []).forEach(function (id) {
+        var key = 'k' + (++form.keyN);
+        form.photos.push({ key: key, serverId: id, ref: { id: id }, blob: null, previewUrl: null });
+        form.originalIds.push(id);
+        if (id === p.capa) form.coverKey = key;
+      });
+      if (!form.coverKey && form.photos[0]) form.coverKey = form.photos[0].key;
+    } else {
+      fillPositions(n + 1, n + 1);
+    }
+    fMsg('');
+    $('fProgress').hidden = true;
+    renderPhotos();
+    setFormBusy(false);
+    $('admForm').hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () { $('fTitulo').focus(); }, 30);
+  }
+
+  function setFormBusy(b) {
+    form.saving = b;
+    ['fSave', 'fCancel', 'fTitulo', 'fCategoria', 'fLocal', 'fDesc', 'fPos', 'fFiles'].forEach(function (id) { $(id).disabled = b; });
+    $('fSave').textContent = b ? 'Salvando…' : 'Salvar projeto';
+    renderPhotos();
+  }
+
+  function renderPhotos() {
+    var box = $('fPhotos'); box.innerHTML = '';
+    form.photos.forEach(function (ph, idx) {
+      var img = el('img', { alt: 'Foto ' + (idx + 1) });
+      if (ph.previewUrl) img.src = ph.previewUrl; else setImg(img, ph.ref, 400);
+      var isCover = ph.key === form.coverKey;
+      var cover = el('button', { type: 'button', text: isCover ? 'Capa ✓' : 'Capa' });
+      cover.disabled = form.saving || isCover;
+      cover.addEventListener('click', function () { form.coverKey = ph.key; renderPhotos(); });
+      var replace = el('button', { type: 'button', text: 'Trocar' });
+      replace.disabled = form.saving;
+      replace.addEventListener('click', function () { pickReplacement(ph); });
+      var rm = el('button', { type: 'button', 'class': 'rm', text: 'Remover' });
+      rm.disabled = form.saving;
+      rm.addEventListener('click', function () {
+        form.photos = form.photos.filter(function (x) { return x !== ph; });
+        if (ph.previewUrl) URL.revokeObjectURL(ph.previewUrl);
+        if (ph.serverId && form.fresh.indexOf(ph.serverId) >= 0) {
+          form.fresh.splice(form.fresh.indexOf(ph.serverId), 1);
+          discardNow([ph.serverId]);
+        }
+        if (form.coverKey === ph.key) form.coverKey = form.photos[0] ? form.photos[0].key : null;
+        renderPhotos();
+      });
+      box.appendChild(el('div', { 'class': 'adm-photo' + (isCover ? ' is-cover' : '') }, [
+        el('div', { 'class': 'img' }, [img]),
+        isCover ? el('span', { 'class': 'badge', text: 'Capa' }) : null,
+        !ph.serverId || ph.blob ? el('span', { 'class': 'badge new', text: 'Nova' }) : null,
+        el('div', { 'class': 'tools' }, [cover, replace, rm])
+      ]));
+    });
+  }
+
+  function addFiles(fileList) {
+    var files = Array.prototype.slice.call(fileList || []);
+    if (!files.length) return;
+    var errors = [];
+    if (form.photos.length + files.length > 40) { errors.push('Máximo de 40 fotos por projeto.'); files = files.slice(0, Math.max(0, 40 - form.photos.length)); }
+    fMsg('Preparando fotos…', true);
+    var chain = Promise.resolve();
+    files.forEach(function (f) {
+      chain = chain.then(function () {
+        return optimizeImage(f).then(function (blob) {
+          var key = 'k' + (++form.keyN);
+          var url = URL.createObjectURL(blob);
+          form.photos.push({ key: key, serverId: null, ref: null, blob: blob, previewUrl: url, name: f.name });
+          if (!form.coverKey) form.coverKey = key;
+          renderPhotos();
+        }).catch(function (e) { errors.push(e.message); });
+      });
+    });
+    return chain.then(function () { fMsg(errors.join(' '), false); if (!errors.length) fMsg(''); });
+  }
+
+  function pickReplacement(ph) {
+    var inp = el('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp' });
+    inp.addEventListener('change', function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      fMsg('Preparando foto…', true);
+      optimizeImage(f).then(function (blob) {
+        if (ph.previewUrl) URL.revokeObjectURL(ph.previewUrl);
+        ph.blob = blob; ph.previewUrl = URL.createObjectURL(blob);
+        if (ph.serverId && form.fresh.indexOf(ph.serverId) >= 0) discardNow([ph.serverId]);
+        ph.serverId = null; ph.ref = null;      // a antiga sai do projeto ao salvar
+        fMsg(''); renderPhotos();
+      }).catch(function (e) { fMsg(e.message); });
+    });
+    inp.click();
+  }
+
+  $('fFiles').addEventListener('change', function () { addFiles(this.files); this.value = ''; });
+  (function dnd() {
+    var d = $('fDrop');
+    ['dragenter', 'dragover'].forEach(function (ev) { d.addEventListener(ev, function (e) { e.preventDefault(); d.classList.add('over'); }); });
+    ['dragleave', 'drop'].forEach(function (ev) { d.addEventListener(ev, function (e) { e.preventDefault(); d.classList.remove('over'); }); });
+    d.addEventListener('drop', function (e) { if (!form.saving) addFiles(e.dataTransfer && e.dataTransfer.files); });
+  })();
+
+  function discardNow(ids) {
+    if (!ids.length || !ssGet(TOKEN_KEY)) return;
+    api('discard', { ids: ids }, true).catch(function () { /* melhor esforço */ });
+  }
+
+  function closeForm(force) {
+    if (form.saving && !force) return;
+    form.photos.forEach(function (p) { if (p.previewUrl) URL.revokeObjectURL(p.previewUrl); });
+    discardNow(form.fresh.filter(function (id) { return form.originalIds.indexOf(id) < 0; }));
+    form.fresh = [];
+    $('admForm').hidden = true;
+    if (!anyOverlayOpen()) document.body.style.overflow = '';
+  }
+
+  $('fCancel').addEventListener('click', function () { closeForm(false); });
+
+  $('admFormEl').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (form.saving) return;
+    var titulo = $('fTitulo').value.trim(), cat = $('fCategoria').value;
+    if (!titulo) { fMsg('Informe o título do projeto.'); $('fTitulo').focus(); return; }
+    if (!cat) { fMsg('Escolha a categoria: Interior ou Exterior.'); $('fCategoria').focus(); return; }
+
+    setFormBusy(true); fMsg('');
+    var toUpload = form.photos.filter(function (p) { return !p.serverId; });
+    var prog = $('fProgress'), bar = prog.firstElementChild;
+    prog.hidden = !toUpload.length; bar.style.width = '0';
+
+    var chain = Promise.resolve(), done = 0;
+    toUpload.forEach(function (ph) {
+      chain = chain.then(function () {
+        fMsg('Enviando foto ' + (done + 1) + ' de ' + toUpload.length + '…', true);
+        return blobToBase64(ph.blob).then(function (b64) {
+          return adminCall('upload', { filename: ph.name || 'foto.jpg', data: b64 });
+        }).then(function (d) {
+          ph.serverId = d.id; ph.blob = null;     // já enviada: se falhar depois, não reenvia
+          form.fresh.push(d.id);
+          done++; bar.style.width = Math.round(done / toUpload.length * 100) + '%';
+        });
+      });
+    });
+
+    chain.then(function () {
+      fMsg('Salvando projeto…', true);
+      var cover = form.photos.filter(function (p) { return p.key === form.coverKey; })[0];
+      return adminCall('save', {
+        id: form.editing ? form.editing.id : undefined,
+        titulo: titulo, categoria: cat,
+        localizacao: $('fLocal').value, descricao: $('fDesc').value,
+        fotos: form.photos.map(function (p) { return p.serverId; }),
+        capa: cover ? cover.serverId : '',
+        posicao: parseInt($('fPos').value, 10) || undefined
+      });
+    }).then(function (d) {
+      form.fresh = [];                       // tudo salvo: nada para descartar
+      closeForm(true);
+      pushList(d.projects);
+      toast(form.editing ? 'Projeto atualizado.' : 'Projeto adicionado ao portfólio.');
+    }).catch(function (err) {
+      fMsg(err.code === 'cancelado' ? 'Operação cancelada. Seus dados continuam no formulário.' : err.message + ' Seus dados continuam aqui; é só tentar de novo.');
+      setFormBusy(false);
+      prog.hidden = true;
+    });
+  });
+
+  /* ─────────────── Importar projetos que já estão no site ─────────────── */
+  $('admImportBtn').addEventListener('click', function () {
+    var btn = this, msg = $('admImportMsg');
+    btn.disabled = true; msg.className = 'adm-msg'; msg.textContent = '';
+    var i = 0, total = legacy.length, last = null;
+    function next() {
+      if (i >= total) return Promise.resolve();
+      var p = legacy[i++];
+      msg.className = 'adm-msg ok'; msg.textContent = 'Importando ' + i + ' de ' + total + '…';
+      return fetch(encodeURI(p.fotos[0].url)).then(function (r) {
+        if (!r.ok) throw new Error('Não foi possível ler a imagem de “' + p.titulo + '”.');
+        return r.blob();
+      }).then(function (blob) {
+        return optimizeImage(new File([blob], 'projeto.jpg', { type: blob.type || 'image/jpeg' }));
+      }).then(blobToBase64).then(function (b64) {
+        return adminCall('upload', { filename: 'projeto.jpg', data: b64 });
+      }).then(function (u) {
+        return adminCall('save', { titulo: p.titulo, categoria: CAT_LABEL[p.categoria] ? p.categoria : 'Exterior', fotos: [u.id], capa: u.id });
+      }).then(function (d) { last = d; return next(); });
+    }
+    next().then(function () {
+      if (last) pushList(last.projects);
+      toast('Projetos importados para o painel.');
+    }).catch(function (err) {
+      if (last) pushList(last.projects);
+      msg.className = 'adm-msg';
+      msg.textContent = (err.message || 'Falha ao importar.') + ' O que já foi importado foi mantido. (A importação só funciona com o site publicado, não aberto direto do computador.)';
+    }).then(function () { btn.disabled = false; });
+  });
+
+  /* ─────────────── Teclado global ─────────────── */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (!$('admConfirm').hidden) return closeConfirm();
+      if (!$('admLogin').hidden) return finishLogin(false);
+      if (!$('admForm').hidden) return closeForm(false);
+      if (!adm.hidden) return closeAdmin();
+      if (!pv.hidden) return closeViewer();
+    }
+    if (!pv.hidden && pvState.p && pvState.p.fotos.length > 1) {
+      if (e.key === 'ArrowLeft') showPhoto(pvState.i - 1);
+      if (e.key === 'ArrowRight') showPhoto(pvState.i + 1);
+    }
+  });
+
+  /* ─────────────── Início ─────────────── */
+  legacy = readLegacy();
+  projects = legacy.slice();
+  renderGrid();
+  loadPublic();
+})();
 </script>
 </body>
 </html>
