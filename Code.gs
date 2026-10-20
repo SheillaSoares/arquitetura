@@ -22,7 +22,7 @@ var CFG = {
   SS_TITLE: 'Portfólio Sheilla Soares - Dados',
   FOLDER_NAME: 'Portfólio Sheilla Soares - Fotos',
   HEADERS: ['id', 'titulo', 'descricao', 'categoria', 'localizacao', 'capa', 'ordem', 'fotos', 'criadoEm', 'atualizadoEm'],
-  CATEGORIES: ['Interior', 'Exterior'],
+  CATEGORIES: ['Interior', 'Exterior', 'Projeto Arquitetônico'],
   SESSION_TTL: 21600,            // 6 horas (máximo do CacheService); renova a cada uso
   MAX_FAILS: 5,                  // tentativas de senha erradas antes de bloquear
   LOCK_SECONDS: 300,             // tempo de bloqueio (5 min)
@@ -291,7 +291,7 @@ function saveProject_(body) {
   var fotos = Array.isArray(body.fotos) ? body.fotos.map(String) : [];
 
   if (!titulo) throw fail_('titulo_obrigatorio', 'Informe o título do projeto.');
-  if (CFG.CATEGORIES.indexOf(categoria) < 0) throw fail_('categoria_invalida', 'Escolha a categoria: Interior ou Exterior.');
+  if (CFG.CATEGORIES.indexOf(categoria) < 0) throw fail_('categoria_invalida', 'Escolha a categoria: Interior, Exterior ou Projeto Arquitetônico.');
   if (fotos.length > CFG.MAX_PHOTOS_PER_PROJECT) {
     throw fail_('muitas_fotos', 'Máximo de ' + CFG.MAX_PHOTOS_PER_PROJECT + ' fotos por projeto.');
   }

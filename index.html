@@ -1335,6 +1335,7 @@
     <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">Todos</button>
     <button type="button" class="filter-btn" data-filter="Interior" aria-pressed="false">Interiores</button>
     <button type="button" class="filter-btn" data-filter="Exterior" aria-pressed="false">Exteriores</button>
+    <button type="button" class="filter-btn" data-filter="Projeto Arquitetônico" aria-pressed="false">Projetos Arquitetônicos</button>
   </div>
   <div class="projetos-grid" id="projetosGrid">
     <div class="proj-card reveal">
@@ -1635,6 +1636,7 @@
           <option value="">Selecione...</option>
           <option value="Interior">Interior</option>
           <option value="Exterior">Exterior</option>
+          <option value="Projeto Arquitetônico">Projeto Arquitetônico</option>
         </select>
       </div>
       <div class="form-group">
@@ -1755,9 +1757,9 @@
 
   /* >>> CONFIGURAÇÃO: cole aqui a URL do App da Web (termina em /exec). <<<
      Enquanto estiver vazio, o site mostra os projetos fixos do HTML. */
-  var PORTFOLIO_API_URL = 'https://script.google.com/macros/s/AKfycbwSA7pQVIzP-hqb1EDNKh3_Pby2s21OqRo8D32VYmyy7eZQzNcv9yzlEpwQJ_5gisJl/exec';
+  var PORTFOLIO_API_URL = '';
 
-  var CAT_LABEL = { Interior: 'Interior', Exterior: 'Exterior' };
+  var CAT_LABEL = { Interior: 'Interior', Exterior: 'Exterior', 'Projeto Arquitetônico': 'Projeto Arquitetônico' };
   var CACHE_KEY = 'portfolio_cache_v1';
   var TOKEN_KEY = 'portfolio_admin_token';
   var MAX_SIDE = 1800;          // maior lado da foto após otimizar
@@ -2389,7 +2391,7 @@
     if (form.saving) return;
     var titulo = $('fTitulo').value.trim(), cat = $('fCategoria').value;
     if (!titulo) { fMsg('Informe o título do projeto.'); $('fTitulo').focus(); return; }
-    if (!cat) { fMsg('Escolha a categoria: Interior ou Exterior.'); $('fCategoria').focus(); return; }
+    if (!cat) { fMsg('Escolha a categoria.'); $('fCategoria').focus(); return; }
 
     setFormBusy(true); fMsg('');
     var toUpload = form.photos.filter(function (p) { return !p.serverId; });
